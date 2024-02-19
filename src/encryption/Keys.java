@@ -23,17 +23,21 @@ public final class Keys {
     
     public static char[] NEncryption(char[] toEncrypt, char[] key)
     {
-        for(int i = 0; i < toEncrypt.length; i++) {
-        	toEncrypt[i] = (char) (toEncrypt[i] + (key[i % key.length]) % 256);
+    	char[] toEncryptClone = toEncrypt.clone();
+    	
+        for(int i = 0; i < toEncryptClone.length; i++) {
+        	toEncryptClone[i] = (char) (toEncryptClone[i] + (key[i % key.length]) % 256);
         }
-        return toEncrypt;
+        return toEncryptClone;
     }
     
     public static char[] NDecryption(char[] toDecrypt, char[] key) {
-    	for (int i = 0; i < toDecrypt.length; i++) {
-    		toDecrypt[i] = (char) (toDecrypt[i] - (key[i % key.length]) % 256);
+    	char[] toDecryptClone = toDecrypt.clone();
+    	
+    	for (int i = 0; i < toDecryptClone.length; i++) {
+    		toDecryptClone[i] = (char) (toDecryptClone[i] - (key[i % key.length]) % 256);
 		}
-    	return toDecrypt;
+    	return toDecryptClone;
     }
     
     public static char[] generateKey() {

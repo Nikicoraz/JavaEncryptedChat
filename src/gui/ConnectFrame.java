@@ -17,6 +17,8 @@ import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.net.Socket;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class ConnectFrame extends JFrame {
 
@@ -78,6 +80,15 @@ public class ConnectFrame extends JFrame {
 		contentPane.add(waitForConnectionBtn);
 		
 		ipToConnectTo = new JTextField();
+		ipToConnectTo.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyChar() == KeyEvent.VK_ENTER) {
+					e.consume();
+					connectBtn.doClick();
+				}
+			}
+		});
 		ipToConnectTo.setToolTipText("IP to connect to...");
 		ipToConnectTo.setBounds(55, 79, 174, 20);
 		contentPane.add(ipToConnectTo);
