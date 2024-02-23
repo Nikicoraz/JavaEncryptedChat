@@ -36,8 +36,8 @@ public class ChatGUI extends JFrame {
 	private Socket s;
 	private BufferedReader br;
 	private PrintWriter bw;
-	private char[] privateKey;
-	private char[] sharedMessageKey;
+	private int[] privateKey;
+	private int[] sharedMessageKey;
 	private JTextPane chatPanel;
 	
 	private void addTextToChatPanel(String text) {
@@ -65,13 +65,13 @@ public class ChatGUI extends JFrame {
 	
 	private void exchangeKeys() {
 		privateKey = encryption.Keys.generateKey();
-		System.out.println((cType == ConnectionType.Active ? "Server" : "Client") + ": Generated private key " + new String(privateKey));
+		System.out.println((cType == ConnectionType.Active ? "Server" : "Client") + ": Generated private key " + new String(encryption.Keys.keyToChar(privateKey)));
 		if(cType == ConnectionType.Active) {
 			try {
 				sharedMessageKey = encryption.Keys.generateKey();
-				System.out.println("Server: Generated new shared message key " + new String(sharedMessageKey));
+				System.out.println("Server: Generated new shared message key " + new String(encryption.Keys.keyToChar(sharedMessageKey)));
 				
-				char[] privateEncryptedMessageKey = encryption.Keys.NEncryption(sharedMessageKey, privateKey);
+				char[] privateEncryptedMessageKey = encryption.Keys.NEncryption(encryption.Keys.keyToChar(sharedMessageKey), privateKey);
 				System.out.println("Server: Sending encrypted shared key " + new String(privateEncryptedMessageKey));
 				
 				bw.println(new String(privateEncryptedMessageKey));
@@ -102,8 +102,8 @@ public class ChatGUI extends JFrame {
 				char[] receivedDecryptedKey = br.readLine().toCharArray();
 				System.out.println("Client: Received the decrypted key " + new String(receivedDecryptedKey));
 				
-				sharedMessageKey = encryption.Keys.NDecryption(receivedDecryptedKey, privateKey);
-				System.out.println("Client: Shared key is " + new String(sharedMessageKey));
+				sharedMessageKey = encryption.Keys.keyToInt(encryption.Keys.NDecryption(receivedDecryptedKey, privateKey));
+				System.out.println("Client: Shared key is " + new String(encryption.Keys.keyToChar(sharedMessageKey)));
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
